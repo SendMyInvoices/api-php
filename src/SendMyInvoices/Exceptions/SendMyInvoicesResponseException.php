@@ -38,15 +38,15 @@ class SendMyInvoicesResponseException extends SendMyInvoicesRestException
 
     /**
      * Retrieves the error message from the response
-     * @return null|string
+     * @return string
      */
-    public function getErrorMessage(): ?string
+    public function getErrorMessage(): string
     {
-        if (isset($this->responseData['success'], $this->responseData['message']) && (bool)$this->responseData['success'] === false) {
-            return $this->responseData['message'];
+        if (isset($this->responseData['success'], $this->responseData['detail']) && (bool)$this->responseData['success'] === false) {
+            return $this->responseData['detail'];
         }
     
-        return null;
+        return '';
     }
 
     /**

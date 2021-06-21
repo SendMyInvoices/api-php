@@ -2,7 +2,7 @@
 
 namespace SendMyInvoices;
 
-use SendMyInvoices\Exceptions\SendMyInvoicesRestException;
+use SendMyInvoices\Exceptions\SendMyInvoicesResponseException;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
@@ -42,7 +42,7 @@ class Client
      * SSL Verify
      * @var Boolean
      */
-    private $sslVerify = true;
+    private $sslVerify = false;
     
     /** @var HttpClient as $httpClient */
     private $httpClient;
@@ -81,27 +81,35 @@ class Client
     /**
      *  Make a network request
      *
-     * @param $endpoint
+     * @param        $endpoint
      * @param string $request_type
-     * @param array $param
+     * @param array  $param
      *
      * @return string $response
+     * @throws SendMyInvoicesResponseException
      */
-    public function request($endpoint, string $request_type='POST', array $param=array()): string
+    public function request($endpoint, string $request_type = 'POST', array $param = array()): string
     {
         try {
             $result = $this->httpClient->request($request_type, $this->getURL().$endpoint, [
-                'verify'  => $this->sslVerify,
-                'json'    => json_encode($param),
-                'timeout' => $this->timeout,
-                'headers' => [
+                'verify'      => $this->sslVerify,
+                'json'        => json_encode($param),
+                'http_errors' => false,
+                'timeout'     => $this->timeout,
+                'headers'     => [
                     'Accept'       => 'application/json',
                     'Content-type' => 'application/json',
                     'X-API-KEY'    => $this->apiKey
                 ]
             ]);
             
-            return $result->getBody()->getContents();
+            if ($result->getStatusCode() !== 200) {
+                $json_response = $result->getBody()->getContents();
+                $response_data = !empty($json_response) ? json_decode($json_response, true) : array();
+                throw new SendMyInvoicesResponseException($response_data, $result->getStatusCode());
+            } else {
+                return $result->getBody()->getContents();
+            }
         } catch (GuzzleException $e) {
             return $e->getMessage();
         }
@@ -112,7 +120,7 @@ class Client
      * Check API status
      *
      * @return string
-     * @throws GuzzleException
+     * @throws SendMyInvoicesResponseException
      */
     public function getApiStatus(): string
     {
@@ -126,7 +134,7 @@ class Client
      * @param $document_code
      *
      * @return string
-     * @throws GuzzleException
+     * @throws SendMyInvoicesResponseException
      */
     public function getDocument($document_code): string
     {
@@ -140,7 +148,7 @@ class Client
      * @param array $param
      *
      * @return string
-     * @throws GuzzleException
+     * @throws SendMyInvoicesResponseException
      */
     public function uploadDocument(array $param): string
     {
@@ -154,7 +162,7 @@ class Client
      * @param $document_code
      *
      * @return string
-     * @throws GuzzleException
+     * @throws SendMyInvoicesResponseException
      */
     public function deleteDocument($document_code): string
     {

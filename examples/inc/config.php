@@ -3,4 +3,4 @@
 
 // Update api key with your sendmyinvoices api key
 
-const SENDMYINVOICES_API_KEY = 'XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX';
+const SENDMYINVOICES_API_KEY = 'XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX';

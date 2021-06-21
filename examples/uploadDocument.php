@@ -1,6 +1,8 @@
 <?php
 namespace SendMyInvoices;
 
+use SendMyInvoices\Exceptions\SendMyInvoicesResponseException;
+
 require_once '../vendor/autoload.php';
 
 // config file
@@ -39,5 +41,9 @@ $param['QRCode'] = true;
 $client = new Client(array(
     'apiKey' => SENDMYINVOICES_API_KEY
 ));
-$response = $client->uploadDocument($param);
-print_r($response);
+try {
+    $response = $client->uploadDocument($param);
+    print_r($response);
+} catch (SendMyInvoicesResponseException $e) {
+    print $e->getErrorMessage();
+}
