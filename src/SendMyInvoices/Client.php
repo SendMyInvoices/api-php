@@ -33,6 +33,14 @@ class Client
     private $apiVersion = 'v1';
     
     /**
+     * Lang Code
+     * Allowed options en_us, de_de. default en_us
+     * This is used to use either fetchbill.com or belegsuche.de in qr-code generation
+     * @var string
+     */
+    private $langCode = '';
+    
+    /**
      * Request Timeout
      * @var Integer
      */
@@ -57,6 +65,10 @@ class Client
         
         if (!empty($params['apiVersion'])) {
             $this->apiVersion = $params['apiVersion'];
+        }
+        
+        if (!empty($params['langCode'])) {
+            $this->langCode = $params['langCode'];
         }
         
         if (!empty($params['sslVerify'])) {
@@ -93,13 +105,14 @@ class Client
         try {
             $result = $this->httpClient->request($request_type, $this->getURL().$endpoint, [
                 'verify'      => $this->sslVerify,
-                'json'        => json_encode($param),
+                'json'        => $param,
                 'http_errors' => false,
                 'timeout'     => $this->timeout,
                 'headers'     => [
                     'Accept'       => 'application/json',
                     'Content-type' => 'application/json',
-                    'X-API-KEY'    => $this->apiKey
+                    'X-API-KEY'    => $this->apiKey,
+                    'X-LANG-CODE'  => $this->langCode
                 ]
             ]);
             
@@ -116,15 +129,29 @@ class Client
     }
     
     /**
-     * Method getApiStatus
+     * Method apiStatus
      * Check API status
      *
      * @return string
      * @throws SendMyInvoicesResponseException
      */
-    public function getApiStatus(): string
+    public function apiStatus(): string
     {
-        return $this->request('apiStatus');
+        return $this->request('apiStatus', 'GET');
+    }
+    
+    /**
+     * Method getCode
+     * Get Document code with or without QR code, before uploading document
+     *
+     * @return string
+     * @throws SendMyInvoicesResponseException
+     */
+    public function getCode(): string
+    {
+        return $this->request('getCode', 'POST', array(
+            'QRCode' => true
+        ));
     }
     
     /**

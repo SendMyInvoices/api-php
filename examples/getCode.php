@@ -5,19 +5,17 @@ use SendMyInvoices\Exceptions\SendMyInvoicesResponseException;
 
 require_once '../vendor/autoload.php';
 
-// config file
+//config file
 
 require_once 'inc/config.php';
 
-// Get document for retrieval code
+// Check API status.
 
-$document_code = 'xxxxxx';
 $client = new Client(array(
     'apiKey' => SENDMYINVOICES_API_KEY
 ));
-
 try {
-    $response = $client->deleteDocument($document_code);
+    $response = $client->getCode();
     print_r($response);
 } catch (SendMyInvoicesResponseException $e) {
     print $e->getErrorMessage();
