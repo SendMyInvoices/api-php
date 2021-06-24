@@ -1,3 +1,3 @@
 # Authors
 SendMyInvoices SDK Team
-https://support.sendmyinvoices.com/
+https://help.getmyinvoices.com/
