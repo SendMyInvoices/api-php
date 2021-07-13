@@ -33,14 +33,6 @@ class Client
     private $apiVersion = 'v1';
     
     /**
-     * Lang Code
-     * Allowed options en_us, de_de. default en_us
-     * This is used to use either fetchbill.com or belegsuche.de in qr-code generation
-     * @var string
-     */
-    private $langCode = '';
-    
-    /**
      * Request Timeout
      * @var Integer
      */
@@ -65,10 +57,6 @@ class Client
         
         if (!empty($params['apiVersion'])) {
             $this->apiVersion = $params['apiVersion'];
-        }
-        
-        if (!empty($params['langCode'])) {
-            $this->langCode = $params['langCode'];
         }
         
         if (!empty($params['sslVerify'])) {
@@ -103,17 +91,23 @@ class Client
     public function request($endpoint, string $request_type = 'POST', array $param = array()): string
     {
         try {
+            $headers = [
+                'Accept'       => 'application/json',
+                'Content-type' => 'application/json',
+                'X-API-KEY'    => $this->apiKey
+            ];
+            if(isset($param['headers'])) {
+                if(is_array($param['headers'])) {
+                    $headers = array_merge($headers, $param['headers']);
+                }
+                unset($param['headers']);
+            }
             $result = $this->httpClient->request($request_type, $this->getURL().$endpoint, [
                 'verify'      => $this->sslVerify,
                 'json'        => $param,
                 'http_errors' => false,
                 'timeout'     => $this->timeout,
-                'headers'     => [
-                    'Accept'       => 'application/json',
-                    'Content-type' => 'application/json',
-                    'X-API-KEY'    => $this->apiKey,
-                    'X-LANG-CODE'  => $this->langCode
-                ]
+                'headers'     => $headers
             ]);
             
             if ($result->getStatusCode() !== 200) {
@@ -177,14 +171,20 @@ class Client
      * Method getDocument
      * Get one document from the account.
      *
-     * @param $document_code
+     * @param       $document_code
+     * @param array $security_params
      *
      * @return string
      * @throws SendMyInvoicesResponseException
      */
-    public function getDocument($document_code): string
+    public function getDocument($document_code, array $security_params=array()): string
     {
-        return $this->request('documents/'.$document_code, 'GET');
+        return $this->request('documents/'.$document_code, 'GET', array(
+            'headers' => [
+                'X-SECURITY-CODE-1' => $security_params['security-code-1'] ?? '',
+                'X-SECURITY-CODE-2' => $security_params['security-code-2'] ?? ''
+            ]
+        ));
     }
     
     /**
@@ -205,13 +205,64 @@ class Client
      * Method deleteDocument
      * Delete one document from the account.
      *
-     * @param $document_code
+     * @param $document_id
      *
      * @return string
      * @throws SendMyInvoicesResponseException
      */
-    public function deleteDocument($document_code): string
+    public function deleteDocument($document_id): string
     {
-        return $this->request('documents/'.$document_code, 'DELETE');
+        return $this->request('documents/'.$document_id, 'DELETE');
+    }
+    
+    /**
+     * Method uploadAttachment
+     * Upload a new attachment.
+     *
+     * @param string $document_id
+     * @param array  $param
+     *
+     * @return string
+     * @throws SendMyInvoicesResponseException
+     */
+    public function uploadAttachment(string $document_id, array $param): string
+    {
+        return $this->request('documents/'.$document_id.'/attachments', 'POST', $param);
+    }
+    
+    /**
+     * Method getAttachment
+     * Get single attachment from document.
+     *
+     * @param       $document_code
+     * @param       $attachmentUid
+     * @param array $security_params
+     *
+     * @return string
+     * @throws SendMyInvoicesResponseException
+     */
+    public function getAttachment($document_code, $attachmentUid, array $security_params=array()): string
+    {
+        return $this->request('documents/'.$document_code.'/attachments/'.$attachmentUid, 'GET', array(
+            'headers' => [
+                'X-SECURITY-CODE-1' => $security_params['security-code-1'] ?? '',
+                'X-SECURITY-CODE-2' => $security_params['security-code-2'] ?? ''
+            ]
+        ));
+    }
+    
+    /**
+     * Method deleteAttachment
+     * Delete one attachment of a document.
+     *
+     * @param $document_id
+     * @param $attachment_id
+     *
+     * @return string
+     * @throws SendMyInvoicesResponseException
+     */
+    public function deleteAttachment($document_id, $attachment_id): string
+    {
+        return $this->request('documents/'.$document_id.'/attachments/'.$attachment_id, 'DELETE');
     }
 }

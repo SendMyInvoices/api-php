@@ -1,7 +1,7 @@
 {
     "name": "sendmyinvoices/api-php",
     "description": "A PHP SDK for the SendMyInvoices API",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "keywords": ["sendmyinvoices","api"],
     "homepage": "http://github.com/sendmyinvoices/api-php",
     "license": "MIT",

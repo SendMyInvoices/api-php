@@ -1,2 +1,27 @@
-# Change Log
-1.0.0 PHP SDK Development 2021-06-21
+# ChangeLog
+
+## [1.0.3] - 2021-07-13
+
+### Added
+* Attachments for document.
+
+## [1.0.2] - 2021-06-24
+
+### Added
+* New method for QRCode using exiting document code.
+* Optional parameter in getCode for either getting only document code or with QRCode.
+
+## [1.0.1] - 2021-06-23
+
+### Added
+* Support higher version of guzzle
+
+## [1.0.0] - 2021-06-21
+
+### Added
+* PHP SDK Development
+
+[1.0.0]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.0
+[1.0.1]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.1
+[1.0.2]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.2
+[1.0.3]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.3

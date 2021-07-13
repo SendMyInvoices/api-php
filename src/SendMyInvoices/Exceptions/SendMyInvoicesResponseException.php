@@ -48,6 +48,45 @@ class SendMyInvoicesResponseException extends SendMyInvoicesRestException
     
         return '';
     }
+    
+    /**
+     * Retrieves the error code from the response
+     * @return string
+     */
+    public function getErrorCode(): string
+    {
+        if (isset($this->responseData['success'], $this->responseData['error_code']) && (bool)$this->responseData['success'] === false) {
+            return $this->responseData['error_code'];
+        }
+        
+        return '';
+    }
+    
+    /**
+     * Retrieves the error key from the response
+     * @return string
+     */
+    public function getErrorKey(): string
+    {
+        if (isset($this->responseData['success'], $this->responseData['error_key']) && (bool)$this->responseData['success'] === false) {
+            return $this->responseData['error_key'];
+        }
+        
+        return '';
+    }
+    
+    /**
+     * Retrieves the response data
+     * @return array
+     */
+    public function getResponseData(): array
+    {
+        if (!empty($this->responseData)) {
+            return $this->responseData;
+        }
+        
+        return [];
+    }
 
     /**
      * Returns an exceptions with a message based on the status code
