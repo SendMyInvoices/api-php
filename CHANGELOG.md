@@ -1,5 +1,10 @@
 # ChangeLog
 
+## [1.0.3] - 2021-07-14
+
+### Added
+* Optional parameter for domain in getCode.
+
 ## [1.0.3] - 2021-07-13
 
 ### Added
@@ -25,3 +30,4 @@
 [1.0.1]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.1
 [1.0.2]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.2
 [1.0.3]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.3
+[1.0.4]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.4

@@ -138,14 +138,16 @@ class Client
      * Method getCode
      * Get Document code with or without QR code, before uploading document
      *
-     * @param bool $qrCode
+     * @param bool   $qrCode
+     * @param string $domain
      *
      * @return string
      * @throws SendMyInvoicesResponseException
      */
-    public function getCode(bool $qrCode = true): string
+    public function getCode(bool $qrCode = true, string $domain = ''): string
     {
         return $this->request('getCode', 'POST', array(
+            'domain' => $domain,
             'qrCode' => $qrCode
         ));
     }
@@ -155,14 +157,16 @@ class Client
      * Get QR code of existing document code
      *
      * @param string $documentCode
+     * @param string $domain
      *
      * @return string
      * @throws SendMyInvoicesResponseException
      */
-    public function getQrCode(string $documentCode): string
+    public function getQrCode(string $documentCode, string $domain = ''): string
     {
         return $this->request('getCode', 'POST', array(
             'qrCode'       => true,
+            'domain'       => $domain,
             'documentCode' => $documentCode
         ));
     }
