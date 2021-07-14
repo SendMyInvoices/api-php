@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [1.0.3] - 2021-07-14
+## [1.0.4] - 2021-07-14
 
 ### Added
 * Optional parameter for domain in getCode.
