@@ -1,5 +1,10 @@
 # ChangeLog
 
+## [1.0.5] - 2021-08-04
+
+### Added
+* Update document.
+
 ## [1.0.4] - 2021-07-14
 
 ### Added
@@ -31,3 +36,4 @@
 [1.0.2]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.2
 [1.0.3]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.3
 [1.0.4]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.4
+[1.0.5]: https://github.com/sendmyinvoices/api-php/releases/tag/1.0.5

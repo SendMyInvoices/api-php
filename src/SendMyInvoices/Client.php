@@ -186,7 +186,11 @@ class Client
         return $this->request('documents/'.$document_code, 'GET', array(
             'headers' => [
                 'X-SECURITY-CODE-1' => $security_params['security-code-1'] ?? '',
-                'X-SECURITY-CODE-2' => $security_params['security-code-2'] ?? ''
+                'X-SECURITY-CODE-2' => $security_params['security-code-2'] ?? '',
+                'X-ACTIVITY' => $security_params['activity'] ?? '',
+                'X-SOURCE' => $security_params['source'] ?? '',
+                'X-CLIENT-IP' => $security_params['client-ip'] ?? '',
+                'X-USER-AGENT' => $security_params['user-agent'] ?? ''
             ]
         ));
     }
@@ -203,6 +207,21 @@ class Client
     public function uploadDocument(array $param): string
     {
         return $this->request('documents', 'POST', $param);
+    }
+    
+    /**
+     * Method updateDocument
+     * Update existing document.
+     *
+     * @param string $document_id
+     * @param array  $param
+     *
+     * @return string
+     * @throws SendMyInvoicesResponseException
+     */
+    public function updateDocument(string $document_id, array $param): string
+    {
+        return $this->request('documents/'.$document_id, 'PUT', $param);
     }
     
     /**
